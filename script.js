@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { icon: 'fas fa-cloud', label: 'Cloud Native', color: '#2d9cdb' }
     ];
 
-    const baseRadius = 145;
+    const baseRadius = 165;
     const total = techIcons.length;
 
     techIcons.forEach((tech, idx) => {
@@ -43,10 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function adjustRadius() {
       const screenWidth = window.innerWidth;
-      let newRadius = 145;
-      if (screenWidth <= 650) newRadius = 105;
-      else if (screenWidth <= 900) newRadius = 125;
-      else newRadius = 145;
+      let newRadius = 150;   // default now 150
+      if (screenWidth <= 650) newRadius = 110;
+      else if (screenWidth <= 900) newRadius = 130;
+      else newRadius = 150;
 
       const icons = document.querySelectorAll('.orbit-icon');
       techIcons.forEach((_, idx) => {
