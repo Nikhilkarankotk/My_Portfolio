@@ -1,106 +1,124 @@
-// Smooth scrolling, Typewriter, Scroll Reveal, and email copy functionality for Nikhil's Portfolio
-(function() {
-  // Copy email button
-  const copyBtn = document.querySelector('.fake-email-btn');
-  if (copyBtn) {
-    copyBtn.addEventListener('click', () => {
-      const email = 'karankotnikhilkumar@gmail.com';
-      navigator.clipboard.writeText(email).then(() => {
-        const originalHTML = copyBtn.innerHTML;
-        copyBtn.innerHTML = '<div><i class="fas fa-check-circle"></i> &nbsp;Copied!</div> <span class="copy-badge" style="background:#10b981; color:#ffffff;">success</span>';
-        copyBtn.style.borderColor = '#10b981';
-        setTimeout(() => {
-          copyBtn.innerHTML = originalHTML;
-          copyBtn.style.borderColor = '';
-        }, 2000);
-      }).catch(() => {});
+document.addEventListener('DOMContentLoaded', () => {
+  // ========== ROTATING ORBIT ICONS (Upright) ==========
+  const orbitContainer = document.getElementById('orbitContainer');
+  if (orbitContainer) {
+    // Spring Boot uses the same fab fa-spring icon (official Font Awesome)
+    const techIcons = [
+      { icon: 'fab fa-java', label: 'Java & Spring Boot', color: '#f89820' },
+      { icon: 'fab fa-aws', label: 'AWS Cloud', color: '#ff9900' },
+      { icon: 'fas fa-brain', label: 'AI & RAG', color: '#a855f7' },
+      { icon: 'fas fa-cubes', label: 'Kubernetes & DevOps', color: '#06b6d4' },
+      { icon: 'fab fa-docker', label: 'Docker', color: '#2496ed' },
+      { icon: 'fab fa-git-alt', label: 'Git Version Control', color: '#f05032' },
+      { icon: 'fas fa-database', label: 'PostgreSQL & Vector DB', color: '#47a248' },
+      { icon: 'fas fa-leaf', label: 'Spring Boot', color: '#6db33f' },
+      { icon: 'fas fa-microchip', label: 'Microservices', color: '#3b82f6' },
+      { icon: 'fas fa-cloud', label: 'Cloud Native', color: '#2d9cdb' }
+    ];
+
+    const baseRadius = 145;
+    const total = techIcons.length;
+
+    techIcons.forEach((tech, idx) => {
+      const angle = (idx / total) * (Math.PI * 2);
+      const x = Math.cos(angle) * baseRadius;
+      const y = Math.sin(angle) * baseRadius;
+
+      const iconDiv = document.createElement('div');
+      iconDiv.className = 'orbit-icon';
+      iconDiv.setAttribute('title', tech.label);
+      iconDiv.style.left = `calc(50% + ${x}px)`;
+      iconDiv.style.top = `calc(50% + ${y}px)`;
+      iconDiv.style.transform = 'translate(-50%, -50%)';
+
+      const iElem = document.createElement('i');
+      const iconClasses = tech.icon.split(' ');
+      iconClasses.forEach(cls => iElem.classList.add(cls));
+      iElem.style.color = tech.color;
+      iElem.style.fontSize = '1.6rem';
+      iconDiv.appendChild(iElem);
+
+      orbitContainer.appendChild(iconDiv);
     });
+
+    function adjustRadius() {
+      const screenWidth = window.innerWidth;
+      let newRadius = 145;
+      if (screenWidth <= 650) newRadius = 105;
+      else if (screenWidth <= 900) newRadius = 125;
+      else newRadius = 145;
+
+      const icons = document.querySelectorAll('.orbit-icon');
+      techIcons.forEach((_, idx) => {
+        const angle = (idx / total) * (Math.PI * 2);
+        const x = Math.cos(angle) * newRadius;
+        const y = Math.sin(angle) * newRadius;
+        const icon = icons[idx];
+        if (icon) {
+          icon.style.left = `calc(50% + ${x}px)`;
+          icon.style.top = `calc(50% + ${y}px)`;
+        }
+      });
+    }
+    window.addEventListener('resize', adjustRadius);
+    adjustRadius();
   }
 
-  // Smooth scroll for navigation links with offset for sticky header
-  document.querySelectorAll('.nav-links a').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      const targetId = this.getAttribute('href');
-      if (targetId && targetId.startsWith('#')) {
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          e.preventDefault();
-          const offset = 80;
-          const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
-          window.scrollTo({
-            top: elementPosition - offset,
-            behavior: 'smooth'
-          });
-        }
+  // ========== SCROLL REVEAL ANIMATION ==========
+  const revealElements = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
       }
     });
-  });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  revealElements.forEach(el => observer.observe(el));
 
-  // Typewriter Animation
-  const typewriter = document.querySelector('.typewriter');
-  if (typewriter) {
-    const words = JSON.parse(typewriter.getAttribute('data-words'));
-    let wordIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    
-    function type() {
-      const currentWord = words[wordIndex];
+  // ========== TYPEWRITER EFFECT ==========
+  const typewriterSpan = document.querySelector('.typewriter');
+  if (typewriterSpan && typewriterSpan.dataset.words) {
+    const words = JSON.parse(typewriterSpan.dataset.words);
+    let wordIndex = 0, charIndex = 0, isDeleting = false, currentText = '';
+    function typeEffect() {
+      const fullWord = words[wordIndex];
       if (isDeleting) {
-        typewriter.textContent = currentWord.substring(0, charIndex - 1);
+        currentText = fullWord.substring(0, charIndex - 1);
         charIndex--;
       } else {
-        typewriter.textContent = currentWord.substring(0, charIndex + 1);
+        currentText = fullWord.substring(0, charIndex + 1);
         charIndex++;
       }
-      
-      let typeSpeed = isDeleting ? 40 : 80;
-      
-      if (!isDeleting && charIndex === currentWord.length) {
-        // Pause at the end of the word
-        typeSpeed = 2000;
+      typewriterSpan.innerText = currentText;
+      if (!isDeleting && charIndex === fullWord.length) {
         isDeleting = true;
-      } else if (isDeleting && charIndex === 0) {
+        setTimeout(typeEffect, 1800);
+        return;
+      }
+      if (isDeleting && charIndex === 0) {
         isDeleting = false;
         wordIndex = (wordIndex + 1) % words.length;
-        typeSpeed = 500;
+        setTimeout(typeEffect, 300);
+        return;
       }
-      
-      setTimeout(type, typeSpeed);
+      setTimeout(typeEffect, isDeleting ? 80 : 120);
     }
-    
-    // Start typing after initial load
-    setTimeout(type, 1000);
+    setTimeout(typeEffect, 400);
   }
 
-  // Intersection Observer for Scroll Reveal (Staggered)
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.1
-  };
-
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        // Check if the element should have a staggered delay
-        if (entry.target.classList.contains('cascade')) {
-          const parent = entry.target.parentElement;
-          const siblings = Array.from(parent.querySelectorAll('.cascade'));
-          const index = siblings.indexOf(entry.target);
-          // Wait briefly based on card index to create a clean reveal flow
-          setTimeout(() => {
-            entry.target.classList.add('active');
-          }, index * 100);
-        } else {
-          entry.target.classList.add('active');
+  // ========== EMAIL COPY FUNCTIONALITY ==========
+  const fakeEmailBtn = document.querySelector('.fake-email-btn');
+  if (fakeEmailBtn) {
+    fakeEmailBtn.addEventListener('click', () => {
+      const email = 'karankotnikhilkumar@gmail.com';
+      navigator.clipboard.writeText(email).then(() => {
+        const badge = fakeEmailBtn.querySelector('.copy-badge');
+        if (badge) {
+          const original = badge.innerText;
+          badge.innerText = 'copied!';
+          setTimeout(() => { badge.innerText = original; }, 1500);
         }
-        observer.unobserve(entry.target); // Trigger only once
-      }
+      }).catch(() => alert('Could not copy email. Please copy manually.'));
     });
-  }, observerOptions);
-
-  document.querySelectorAll('.reveal').forEach(el => {
-    observer.observe(el);
-  });
-})();
+  }
+});
