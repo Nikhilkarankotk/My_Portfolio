@@ -1,3 +1,8 @@
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
 /* Premium Tech Design System for Nikhil Kumar Karankot */
 :root {
   --bg-primary: #080b11;
@@ -1256,24 +1261,41 @@ footer p {
 
 @media (max-width: 768px) {
   section {
-    padding: 4rem 0 3rem;
+    padding: 4rem 0;
+  }
+  .container {
+    width: 92%;
+  }
+  .timeline-item {
+    padding-left: 38px;
+  }
+  .timeline::before {
+    left: 10px;
+  }
+  .timeline-dot {
+    left: 1px;
+  }
+  .contact-flex {
+    grid-template-columns: 1fr;
+    padding: 2rem;
   }
   .nav-flex {
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1rem;
   }
   .nav-links {
     justify-content: center;
-    gap: 1.25rem;
+    gap: 1rem;
   }
   .hero-content h1 {
-    font-size: 2.8rem;
+    font-size: clamp(2.2rem, 7vw, 4.2rem);
+    line-height: 1.1;
   }
   .hero-highlight {
     font-size: 1.3rem;
   }
   .section-title {
-    font-size: 1.8rem;
+    font-size: clamp(2rem, 5vw, 3rem);
   }
   .contact-flex {
     flex-direction: column;
@@ -1395,4 +1417,12 @@ footer p {
 .bento-card {
   opacity: 1 !important;
   visibility: visible !important;
+}
+.hero-grid,
+.contact-flex,
+.skills-grid,
+.projects-grid,
+.highlight-grid {
+
+  width: 100%;
 }
