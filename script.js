@@ -41,6 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
       orbitContainer.appendChild(iconDiv);
     });
 
+
+    const radius = 150;   // matches .wheel-ring width/2
+    const angleStep = (Math.PI * 2) / techStack.length;
+
+    techStack.forEach((tech, idx) => {
+    const angle = idx * angleStep;
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
+    iconDiv.style.left = `calc(50% + ${x}px)`;
+    iconDiv.style.top = `calc(50% + ${y}px)`;
+  // transform: translate(-50%, -50%) already centers the icon on the point
+  });
     function adjustRadius() {
       const screenWidth = window.innerWidth;
       let newRadius = 150;   // default now 150
