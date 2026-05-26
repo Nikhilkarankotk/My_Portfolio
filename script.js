@@ -16,13 +16,18 @@ document.addEventListener('DOMContentLoaded', () => {
       { icon: 'fas fa-cloud', label: 'Cloud Native', color: '#2d9cdb' }
     ];
 
-    const baseRadius = 165;
+    const getRadius = () => {
+      if (window.innerWidth <= 480) return 105;
+      if (window.innerWidth <= 768) return 125;
+      return 165;
+    };
     const total = techIcons.length;
 
     techIcons.forEach((tech, idx) => {
+      const radius = getRadius();
       const angle = (idx / total) * (Math.PI * 2);
-      const x = Math.cos(angle) * baseRadius;
-      const y = Math.sin(angle) * baseRadius;
+      const x = Math.cos(angle) * radius;
+      const y = Math.sin(angle) * radius;
 
       const iconDiv = document.createElement('div');
       iconDiv.className = 'orbit-icon';
@@ -40,19 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       orbitContainer.appendChild(iconDiv);
     });
-
-
-    const radius = 150;   // matches .wheel-ring width/2
-    const angleStep = (Math.PI * 2) / techStack.length;
-
-    techStack.forEach((tech, idx) => {
-    const angle = idx * angleStep;
-    const x = Math.cos(angle) * radius;
-    const y = Math.sin(angle) * radius;
-    iconDiv.style.left = `calc(50% + ${x}px)`;
-    iconDiv.style.top = `calc(50% + ${y}px)`;
-  // transform: translate(-50%, -50%) already centers the icon on the point
-  });
     function adjustRadius() {
       const screenWidth = window.innerWidth;
       let newRadius = 150;   // default now 150
