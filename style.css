@@ -1421,9 +1421,100 @@ footer p {
   /* ... other styles ... */
 }
 
-.reveal {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
+/* =========================================
+   MOBILE OVERFLOW FIXES
+========================================= */
+
+html,
+body {
+
+  max-width: 100%;
+
+  overflow-x: hidden;
+}
+
+* {
+
+  max-width: 100%;
+}
+
+img {
+
+  display: block;
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+  .hero {
+
+    padding-top: 4rem;
+  }
+
+  .hero-grid {
+
+    flex-direction: column-reverse;
+
+    gap: 2rem;
+  }
+
+  .hero-content {
+
+    text-align: center;
+  }
+
+  .hero-desc {
+
+    margin-inline: auto;
+  }
+
+  .btn-group {
+
+    justify-content: center;
+  }
+
+  .projects-grid,
+  .skills-grid,
+  .bento-grid {
+
+    grid-template-columns: 1fr;
+  }
+
+  .bento-ach-list {
+
+    grid-template-columns: 1fr;
+  }
+
+  .contact-flex {
+
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links {
+
+    justify-content: center;
+  }
+}
+
+/* SMALL MOBILE */
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+  }
+  .hero-content h1 {
+    font-size: 2.3rem;
+  }
+  .hero-highlight {
+    font-size: 1.1rem;
+  }
+  .section-title {
+    font-size: 1.9rem;
+  }
+  .avatar-visual {
+    width: 290px;
+  }
 }
 
 .timeline-item,
