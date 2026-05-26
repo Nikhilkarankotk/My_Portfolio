@@ -5,7 +5,6 @@
 /* =========================
    ROOT VARIABLES
 ========================= */
-
 :root {
 
   --bg-primary: #080b11;
@@ -136,7 +135,7 @@ img{
 
   pointer-events:none;
 
-  filter:blur(60px);
+  filter:blur(40px);
 
   z-index:-1;
 }
@@ -1092,7 +1091,7 @@ footer{
    REVEAL
 ========================= */
 
-.reveal{
+/* .reveal{
 
   opacity:0;
 
@@ -1108,6 +1107,15 @@ footer{
   opacity:1;
 
   transform:translateY(0);
+} */
+
+.reveal{
+
+  opacity:1;
+
+  transform:none;
+
+  transition:none;
 }
 
 /* =========================
